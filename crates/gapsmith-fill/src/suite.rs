@@ -306,7 +306,7 @@ fn step2(
         // Probe feasibility.
         let probe = fba(
             &current,
-            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
         )?;
         if matches!(probe.status, SolveStatus::Optimal) && probe.objective >= 1e-6 {
             if sink_added {
@@ -457,7 +457,7 @@ fn step3(
 
         let probe = fba(
             &current,
-            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
         )?;
         if matches!(probe.status, SolveStatus::Optimal) && probe.objective >= 1e-7 {
             cs_table.push((cpd.clone(), name.clone(), true));
@@ -551,7 +551,7 @@ fn step4(
 
         let probe = fba(
             &current,
-            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
         )?;
         if matches!(probe.status, SolveStatus::Optimal) && probe.objective >= 1e-7 {
             ferm_table.push((cpd.clone(), name.clone(), true));
@@ -815,7 +815,7 @@ fn build_gapfill_options(min_growth: f64, n_rxns_full: usize) -> GapfillOptions 
 fn current_growth(model: &Model) -> Result<f64, FillError> {
     let sol = fba(
         model,
-        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
     )?;
     Ok(if matches!(sol.status, SolveStatus::Optimal) {
         sol.objective

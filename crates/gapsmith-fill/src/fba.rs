@@ -9,7 +9,7 @@ use crate::lp::SplitFluxLp;
 use gapsmith_core::Model;
 use good_lp::{
     constraint, solvers::highs::highs, variable, Expression, ProblemVariables,
-    ResolutionError, Solution, SolverModel, Variable,
+    ResolutionError, Solution, SolverModel, Variable, WithInitialSolution,
 };
 
 #[derive(Debug, Clone)]
@@ -23,11 +23,21 @@ pub struct FbaOptions {
     /// default; anything ≥ this is treated as +∞ internally. Matches
     /// cobrar's `COBRAR_MAX_FLUX`.
     pub max_flux: f64,
+    /// Optional hot-start: previous solution's net-flux per reaction
+    /// (length must equal `model.rxn_count()`). When `Some`, HiGHS is
+    /// seeded with the split-flux decomposition of this vector
+    /// (`vp = max(v, 0), vn = max(-v, 0)`) via `with_initial_solution`.
+    /// The seed just shortcuts the solve — it doesn't constrain the
+    /// optimum — but it can nudge HiGHS toward a *different*
+    /// alternative optimum, so consecutive warm-started solves may
+    /// produce flux vectors that differ from a cold cascade even though
+    /// both are optimal. **Off by default for byte-parity.**
+    pub hot_start: Option<Vec<f64>>,
 }
 
 impl Default for FbaOptions {
     fn default() -> Self {
-        Self { objective: None, maximise: true, max_flux: 1000.0 }
+        Self { objective: None, maximise: true, max_flux: 1000.0, hot_start: None }
     }
 }
 
@@ -59,6 +69,25 @@ pub fn fba(model: &Model, opts: &FbaOptions) -> Result<FbaSolution, FillError> {
     let row_exprs = build_row_exprs(model, &vp, &vn, m);
     for expr in row_exprs {
         problem = problem.with(constraint!(expr == 0.0));
+    }
+
+    // Hot-start seeding: decompose the caller's net-flux vector into
+    // (vp, vn) = (max(v,0), max(-v,0)) and hand it to good_lp's
+    // `with_initial_solution`. HiGHS begins the simplex from the seed
+    // rather than the default all-zero basis.
+    if let Some(hot) = opts.hot_start.as_ref() {
+        if hot.len() == n {
+            let seeds: Vec<(Variable, f64)> = (0..n)
+                .flat_map(|i| {
+                    let v = hot[i];
+                    [
+                        (vp[i], v.max(0.0)),
+                        (vn[i], (-v).max(0.0)),
+                    ]
+                })
+                .collect();
+            problem = problem.with_initial_solution(seeds);
+        }
     }
 
     let solution = match problem.solve() {

@@ -144,7 +144,7 @@ pub fn gapfill4(
     // Verify the filled draft meets min_growth via plain FBA.
     let fba_sol = fba(
         &filled,
-        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
     )?;
     if !matches!(fba_sol.status, SolveStatus::Optimal) || fba_sol.objective < opts.min_growth {
         tracing::warn!(
@@ -229,7 +229,7 @@ pub fn gapfill4(
         filled.rxns[pos].ub = 0.0;
         let probe = fba(
             &filled,
-            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+            &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
         )?;
         let still_grows = matches!(probe.status, SolveStatus::Optimal)
             && probe.objective >= opts.min_growth;
@@ -254,7 +254,7 @@ pub fn gapfill4(
 
     let final_fba = fba(
         &filled,
-        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
     )?;
 
     Ok(GapfillReport {

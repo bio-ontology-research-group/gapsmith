@@ -68,7 +68,7 @@ fn ecoli_end_to_end_fill() {
     // objective. Obj > 0 after the target-met sink is attached.
     let probe = fba(
         &full,
-        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
     )
     .unwrap();
     assert_eq!(probe.status, SolveStatus::Optimal);

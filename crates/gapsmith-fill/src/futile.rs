@@ -94,7 +94,7 @@ pub fn detect_futile_cycles(
             obj[idx] = 1.0;
             let fwd = fba(
                 &closed,
-                &FbaOptions { objective: Some(obj.clone()), maximise: true, max_flux: opts.max_flux },
+                &FbaOptions { objective: Some(obj.clone()), maximise: true, max_flux: opts.max_flux , hot_start: None },
             );
             let mut caught = matches!(&fwd, Ok(s) if matches!(s.status, SolveStatus::Optimal) && s.objective >= threshold);
             if !caught {
@@ -103,7 +103,7 @@ pub fn detect_futile_cycles(
                 obj_neg[idx] = -1.0;
                 let bwd = fba(
                     &closed,
-                    &FbaOptions { objective: Some(obj_neg), maximise: true, max_flux: opts.max_flux },
+                    &FbaOptions { objective: Some(obj_neg), maximise: true, max_flux: opts.max_flux , hot_start: None },
                 );
                 caught = matches!(&bwd, Ok(s) if matches!(s.status, SolveStatus::Optimal) && s.objective >= threshold);
             }

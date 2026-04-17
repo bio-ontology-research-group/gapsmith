@@ -336,7 +336,7 @@ fn adapt_growth(
     // Probe: does the model already grow on this compound?
     let sol = fba(
         model,
-        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: None, maximise: true, max_flux: 1000.0 , hot_start: None },
     )?;
     if matches!(sol.status, SolveStatus::Optimal) && sol.objective >= min_growth {
         eprintln!("model already grows on {cpd} (bio1={:.4})", sol.objective);

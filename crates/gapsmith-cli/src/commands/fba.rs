@@ -77,6 +77,7 @@ pub fn run(args: Args) -> anyhow::Result<()> {
                 objective: None,
                 maximise: !args.minimise,
                 max_flux: 1000.0,
+                hot_start: None,
             },
         )?;
         print_summary(&model, sol.status, sol.objective, &sol.fluxes, args.top, "FBA");

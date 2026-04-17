@@ -65,7 +65,7 @@ pub fn pfba(model: &Model, opts: &PfbaOptions) -> Result<PfbaSolution, FillError
     }
     let obj_coefs = resolve_obj(
         model,
-        &FbaOptions { objective: opts.objective.clone(), maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: opts.objective.clone(), maximise: true, max_flux: 1000.0 , hot_start: None },
     )?;
 
     let lp = SplitFluxLp::from_model(model);
@@ -140,6 +140,19 @@ pub fn pfba(model: &Model, opts: &PfbaOptions) -> Result<PfbaSolution, FillError
     Ok(PfbaSolution { status: SolveStatus::Optimal, objective, fluxes, growth })
 }
 
+/// Shared memo of the last successful (tolerance, pFBA coefficient) pair
+/// the ladder converged on. When the same process does multiple
+/// `pfba_heuristic` calls (the 4-phase suite iterating over carbon
+/// sources, batch runs, etc.), seeding the next ladder from the last
+/// success avoids re-traversing the first few wasted iterations.
+///
+/// **Off by default for byte-parity.** Enabled via
+/// `PfbaHeuristicOptions::ladder_memo = Some(Arc::new(LadderMemo::new()))`.
+/// Starting from a different (tol, coef) can cause HiGHS to pick a
+/// different alternative optimum — flux vectors may differ even
+/// though the objective and biomass growth are identical.
+pub type LadderMemo = std::sync::Mutex<Option<(f64, f64)>>;
+
 #[derive(Debug, Clone)]
 pub struct PfbaHeuristicOptions {
     pub weights: Vec<f64>,
@@ -158,6 +171,11 @@ pub struct PfbaHeuristicOptions {
     /// with CBC (the `cbc` feature must be enabled at build time). Default
     /// `false`.
     pub cbc_fallback: bool,
+    /// Optional cross-call memo: if `Some`, use the last successful
+    /// (tol, coef) as starting point instead of `(start_tol,
+    /// start_pfba_coef)`, and write the ladder's final state back on
+    /// success. **Not byte-parity-identical with default behavior.**
+    pub ladder_memo: Option<std::sync::Arc<LadderMemo>>,
 }
 
 impl PfbaHeuristicOptions {
@@ -171,6 +189,7 @@ impl PfbaHeuristicOptions {
             max_iter: 15,
             objective: None,
             cbc_fallback: false,
+            ladder_memo: None,
         }
     }
 }
@@ -188,8 +207,19 @@ pub fn pfba_heuristic(
     model: &Model,
     opts: &PfbaHeuristicOptions,
 ) -> Result<PfbaSolution, FillError> {
-    let mut tol = opts.start_tol;
-    let mut coef = opts.start_pfba_coef;
+    // Seed the ladder from the memo if one is provided. The cached pair
+    // holds (last_tol, last_coef) from a prior successful solve; we
+    // clamp to the current opts bounds so a stale memo can't push us
+    // outside the user's configured range.
+    let (mut tol, mut coef) = match opts.ladder_memo.as_ref() {
+        Some(memo) => match memo.lock() {
+            Ok(g) => g.unwrap_or((opts.start_tol, opts.start_pfba_coef)),
+            Err(_) => (opts.start_tol, opts.start_pfba_coef),
+        },
+        None => (opts.start_tol, opts.start_pfba_coef),
+    };
+    tol = tol.clamp(opts.min_tol, opts.start_tol);
+    coef = coef.clamp(0.0, opts.start_pfba_coef);
 
     for _ in 0..opts.max_iter {
         let sol = pfba(
@@ -210,9 +240,16 @@ pub fn pfba_heuristic(
 
         // Validation FBA on the reduced model.
         let reduced = remove_zero_flux(model, &sol.fluxes, tol);
-        let vopts = FbaOptions { objective: opts.objective.clone(), maximise: true, max_flux: 1000.0 };
+        let vopts = FbaOptions { objective: opts.objective.clone(), maximise: true, max_flux: 1000.0 , hot_start: None };
         let val = fba(&reduced, &vopts)?;
         if matches!(val.status, SolveStatus::Optimal) && val.objective >= opts.min_growth {
+            // Record the (tol, coef) that succeeded so subsequent calls
+            // with this memo can skip the first few wasted iterations.
+            if let Some(memo) = opts.ladder_memo.as_ref() {
+                if let Ok(mut g) = memo.lock() {
+                    *g = Some((tol, coef));
+                }
+            }
             return Ok(sol);
         }
 
@@ -258,7 +295,7 @@ fn pfba_cbc(model: &Model, opts: &PfbaHeuristicOptions) -> Result<PfbaSolution, 
     let n = model.rxn_count();
     let obj_coefs = resolve_obj(
         model,
-        &FbaOptions { objective: opts.objective.clone(), maximise: true, max_flux: 1000.0 },
+        &FbaOptions { objective: opts.objective.clone(), maximise: true, max_flux: 1000.0 , hot_start: None },
     )?;
 
     let lp = SplitFluxLp::from_model(model);
