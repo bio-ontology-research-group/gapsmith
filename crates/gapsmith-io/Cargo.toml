@@ -7,6 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description = "I/O helpers for gapsmith: model (de)serialization (CBOR/JSON), paths, TSV/FASTA utilities."
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [dependencies]
 gapsmith-core = { workspace = true }

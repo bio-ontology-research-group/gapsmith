@@ -7,6 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description = "Pathway/reaction finder for gapsmith: selects pathways, orchestrates alignment, classifies hits, scores completeness."
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [dependencies]
 gapsmith-core = { workspace = true }

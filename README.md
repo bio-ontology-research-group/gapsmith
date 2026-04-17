@@ -68,23 +68,32 @@ cargo build --release
 
 ### Reference data
 
-Two parts, independent:
+Three parts, fetched independently:
 
 1. **Curation tables** (subex, medium rules, biomass templates, …) —
    vendored in this repo under `data/`. ~1 MB. Auto-used when running
    from a checkout; bundled inside release tarballs.
-2. **Sequence database** (per-reaction FASTAs, ~2 GB) — downloaded
+2. **Large public reference tables** (SEED reactions + metabolites,
+   MNXref cross-refs, ~65 MB) — fetched on demand from upstream gapseq's
+   GitHub mirror:
+
+    ```bash
+    gapsmith update-data -o path/to/dat
+    ```
+3. **Sequence database** (per-reaction FASTAs, ~2 GB) — downloaded
    from Zenodo on demand:
 
     ```bash
-    gapsmith update-sequences -t Bacteria
+    gapsmith update-sequences -D path/to/dat/seq -t Bacteria
     ```
 
-3. **Large public reference tables** (SEED reactions + metabolites,
-   MNXref) — currently user-supplied via `--data-dir`. Easiest source:
-   clone upstream gapseq (`git clone --depth 1 https://github.com/jotech/gapseq.git`)
-   and point `--data-dir` at its `dat/` directory. Future versions
-   will bundle these via `gapsmith update-data`.
+After that you have a complete data directory and no longer need any
+upstream gapseq checkout. Point all subsequent invocations at it with
+`--data-dir path/to/dat`.
+
+License-restricted data (MetaCyc pathways, KEGG, BiGG, BRENDA, VMH) is
+left opt-in; a forthcoming `--accept-license` flag will gate loading
+those.
 
 ## Quick start
 
@@ -128,6 +137,7 @@ gapsmith --data-dir path/to/dat fill output/*-draft.gmod.cbor -n output/*-medium
 | `adapt` | Add/remove reactions or force growth on compounds |
 | `pan` | Build a pan-draft model from multiple drafts |
 | `update-sequences` | Sync reference sequence database from Zenodo |
+| `update-data` | Fetch the large public reference tables (SEED, MNXref) |
 | `convert` | Convert between CBOR and JSON model formats |
 | `export-sbml` | Export a model as SBML |
 

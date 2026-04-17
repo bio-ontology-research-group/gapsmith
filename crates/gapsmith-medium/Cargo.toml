@@ -7,6 +7,10 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Rule-based medium inference — port of gapseq's predict_medium.R"
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [dependencies]
 gapsmith-core = { workspace = true }

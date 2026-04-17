@@ -7,6 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description = "Command-line interface for gapsmith."
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [[bin]]
 name = "gapsmith"

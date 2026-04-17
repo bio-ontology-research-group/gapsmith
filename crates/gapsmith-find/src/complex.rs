@@ -93,9 +93,7 @@ pub fn detect_subunits(
     let n = hits.len();
     let any = hits.iter().filter(|h| h.is_some()).count();
     if any * 5 <= n {
-        for h in &mut hits {
-            *h = None;
-        }
+        hits.fill(None);
     }
 
     hits

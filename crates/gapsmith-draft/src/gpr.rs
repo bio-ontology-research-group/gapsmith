@@ -37,7 +37,7 @@ pub fn build_gpr_string(rows: &[GeneAssignment<'_>]) -> String {
             Some(c) if !c.is_empty() && c != "Subunit undefined" => {
                 complex_groups.entry(c).or_default().push(r.gene);
             }
-            Some(c) if c == "Subunit undefined" => {
+            Some("Subunit undefined") => {
                 // "Subunit undefined" only contributes to monomers when
                 // there is no real complex present.
                 if !any_real_complex {

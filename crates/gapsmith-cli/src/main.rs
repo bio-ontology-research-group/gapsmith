@@ -109,6 +109,9 @@ pub enum Cmd {
     /// Sync the reference sequence database from Zenodo.
     #[command(name = "update-sequences")]
     UpdateSequences(commands::update_sequences::Args),
+    /// Fetch the large public reference tables (SEED, MNXref) from upstream.
+    #[command(name = "update-data")]
+    UpdateData(commands::update_data::UpdateDataArgs),
     /// Cluster N genomes, align once, expand per-genome TSVs.
     #[command(name = "batch-align")]
     BatchAlign(commands::batch_align::Args),
@@ -168,6 +171,7 @@ fn main() -> anyhow::Result<()> {
             cli.data_dir.as_deref(),
             cli.seq_dir.as_deref(),
         ),
+        Cmd::UpdateData(args) => commands::update_data::run(args),
         other => {
             anyhow::bail!(
                 "subcommand `{}` is scaffolded but not yet implemented in this milestone",
@@ -196,5 +200,6 @@ fn subcommand_label(c: &Cmd) -> &'static str {
         Cmd::Adapt(_) => "adapt",
         Cmd::Pan(_) => "pan",
         Cmd::UpdateSequences(_) => "update-sequences",
+        Cmd::UpdateData(_) => "update-data",
     }
 }

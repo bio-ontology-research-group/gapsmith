@@ -157,7 +157,7 @@ pub fn select(table: &PathwayTable, opts: &PathwaySelectOptions<'_>) -> Vec<Expa
 fn hierarchy_matches_any(hierarchy: &str, keys_lc: &[String]) -> bool {
     // Split on `|` AND `;`, matching R's `strsplit(hierarchy, "\\|")` and
     // the alternative `strsplit(hierarchy, "\\;")`.
-    for token in hierarchy.split(|c: char| c == '|' || c == ';') {
+    for token in hierarchy.split(['|', ';']) {
         let t = token.trim().to_ascii_lowercase();
         if keys_lc.iter().any(|k| k == &t) {
             return true;

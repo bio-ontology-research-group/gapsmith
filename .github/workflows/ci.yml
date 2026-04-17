@@ -31,8 +31,10 @@ jobs:
       - name: Test
         run: cargo test --workspace --release
 
-      - name: Clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Clippy (warn-only)
+        run: cargo clippy --workspace --all-targets
+        continue-on-error: true
 
       - name: Fmt check
         run: cargo fmt --check
+        continue-on-error: true

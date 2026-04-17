@@ -21,6 +21,10 @@ rust-version = "1.80"
 authors = ["Robert Hoehndorf <robert.hoehndorf@kaust.edu.sa>"]
 license = "GPL-3.0-or-later"
 repository = "https://github.com/bio-ontology-research-group/gapsmith"
+homepage = "https://bio-ontology-research-group.github.io/gapsmith/"
+readme = "README.md"
+keywords = ["bioinformatics", "genomics", "metabolism", "metabolic-network", "fba"]
+categories = ["science", "command-line-utilities"]
 description = "Rust reimplementation of gapseq — informed prediction and analysis of bacterial metabolic pathways and genome-scale networks"
 
 [workspace.dependencies]

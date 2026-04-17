@@ -257,8 +257,8 @@ pub fn drop_reactions(model: &mut Model, rxn_ids: &HashSet<String>) {
     let n_rxns_new = next;
 
     let mut triplets: Vec<(usize, usize, f64)> = Vec::with_capacity(model.s.nnz());
-    for c in 0..n_rxns_old {
-        if let Some(new_c) = new_col_ix[c] {
+    for (c, slot) in new_col_ix.iter().enumerate().take(n_rxns_old) {
+        if let Some(new_c) = *slot {
             for (row, v) in model.s.column(c) {
                 triplets.push((row, new_c, v));
             }

@@ -228,15 +228,17 @@ mod pending {
 
     use std::cell::RefCell;
 
+    type Column = (usize, Vec<(usize, f64)>);
+
     thread_local! {
-        static PENDING: RefCell<Vec<(usize, Vec<(usize, f64)>)>> = const { RefCell::new(Vec::new()) };
+        static PENDING: RefCell<Vec<Column>> = const { RefCell::new(Vec::new()) };
     }
 
     pub fn push_column(rxn_idx: usize, entries: Vec<(usize, f64)>) {
         PENDING.with(|p| p.borrow_mut().push((rxn_idx, entries)));
     }
 
-    pub fn take() -> Vec<(usize, Vec<(usize, f64)>)> {
+    pub fn take() -> Vec<Column> {
         PENDING.with(|p| std::mem::take(&mut *p.borrow_mut()))
     }
 }

@@ -7,6 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description = "Streaming SBML L3V1 + FBC2 + groups writer for gapsmith."
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [dependencies]
 gapsmith-core = { workspace = true }

@@ -26,6 +26,10 @@ use gapsmith_core::{CompartmentId, Metabolite, Model, Reaction, StoichMatrix};
 use gapsmith_db::SeedRxnRow;
 use std::path::Path;
 
+/// Return type of each step driver: the updated model, added SEED ids,
+/// and the per-candidate (id, carbon-source, kept) audit trail.
+type StepOutcome = (Model, Vec<String>, Vec<(String, String, bool)>);
+
 /// Per-phase options shared by Steps 1, 2, 2b.
 #[derive(Debug, Clone)]
 pub struct SuiteOptions {
@@ -407,7 +411,7 @@ fn step3(
     weights: &RxnWeights,
     seed_rxns: &[SeedRxnRow],
     opts: &SuiteOptions,
-) -> Result<(Model, Vec<String>, Vec<(String, String, bool)>), FillError> {
+) -> Result<StepOutcome, FillError> {
     let mut current = model.clone();
     // Install ESP reactions on the draft.
     for esp in esp_reactions() {
@@ -508,7 +512,7 @@ fn step4(
     weights: &RxnWeights,
     seed_rxns: &[SeedRxnRow],
     opts: &SuiteOptions,
-) -> Result<(Model, Vec<String>, Vec<(String, String, bool)>), FillError> {
+) -> Result<StepOutcome, FillError> {
     let mut current = model.clone();
     apply_medium(&mut current, medium, 1.0, 1000.0);
 

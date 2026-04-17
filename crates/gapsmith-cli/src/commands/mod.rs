@@ -19,4 +19,5 @@ pub mod find_transport;
 pub mod medium;
 pub mod pan;
 pub mod test;
+pub mod update_data;
 pub mod update_sequences;

@@ -72,7 +72,7 @@ fn fmt_evalue(v: f64) -> String {
         return "0".to_string();
     }
     let abs = v.abs();
-    if abs < 1e-3 || abs >= 1e5 {
+    if !(1e-3..1e5).contains(&abs) {
         // BLAST emits 2 digits after the decimal: "2.52e-41".
         let s = format!("{v:.2e}");
         // Rust emits "2.52e-41" the same as BLAST does in this range.

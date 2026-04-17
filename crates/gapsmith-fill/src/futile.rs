@@ -123,7 +123,7 @@ mod tests {
         );
         let bad = detect_futile_cycles(
             &m,
-            &vec!["R1".into(), "R2".into()],
+            &["R1".into(), "R2".into()],
             &FutileOptions::default(),
         )
         .unwrap();
@@ -148,7 +148,7 @@ mod tests {
         );
         let bad = detect_futile_cycles(
             &m,
-            &vec!["R1".into()],
+            &["R1".into()],
             &FutileOptions::default(),
         )
         .unwrap();

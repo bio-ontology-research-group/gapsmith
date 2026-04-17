@@ -7,6 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description = "Alignment abstraction for gapsmith: blast/diamond/mmseqs2 runners + precomputed TSV ingestion."
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [dependencies]
 serde = { workspace = true }

@@ -7,6 +7,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description = "Transporter detection for gapsmith (port of src/transporter.sh + analyse_alignments_transport.R)."
+categories.workspace = true
+keywords.workspace = true
+readme.workspace = true
+homepage.workspace = true
 
 [dependencies]
 gapsmith-core = { workspace = true }
