@@ -1,0 +1,13 @@
+/target/
+**/*.rs.bk
+Cargo.lock
+*.swp
+*.swo
+*~
+.DS_Store
+
+# uv / Python venvs used for SBML validation
+tools/.sbml-validate/
+
+# Benchmark scratch
+tools/bench/__pycache__/

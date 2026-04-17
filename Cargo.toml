@@ -1,0 +1,58 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/gapseq-core",
+    "crates/gapseq-io",
+    "crates/gapseq-db",
+    "crates/gapseq-sbml",
+    "crates/gapseq-align",
+    "crates/gapseq-find",
+    "crates/gapseq-transport",
+    "crates/gapseq-draft",
+    "crates/gapseq-fill",
+    "crates/gapseq-medium",
+    "crates/gapseq-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+authors = ["Robert Hoehndorf <robert.hoehndorf@kaust.edu.sa>"]
+license = "GPL-3.0-or-later"
+repository = "https://github.com/bio-ontology-research-group/gapseq-rs"
+description = "Rust reimplementation of gapseq — informed prediction and analysis of bacterial metabolic pathways and genome-scale networks"
+
+[workspace.dependencies]
+anyhow = "1"
+thiserror = "2"
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = "1"
+ciborium = "0.2"
+sprs = { version = "0.11", default-features = false, features = ["serde"] }
+clap = { version = "4", features = ["derive", "wrap_help"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Workspace-internal
+gapseq-core = { path = "crates/gapseq-core" }
+gapseq-io   = { path = "crates/gapseq-io" }
+gapseq-db   = { path = "crates/gapseq-db" }
+gapseq-sbml = { path = "crates/gapseq-sbml" }
+gapseq-align = { path = "crates/gapseq-align" }
+gapseq-find = { path = "crates/gapseq-find" }
+gapseq-transport = { path = "crates/gapseq-transport" }
+gapseq-draft = { path = "crates/gapseq-draft" }
+gapseq-fill = { path = "crates/gapseq-fill" }
+gapseq-medium = { path = "crates/gapseq-medium" }
+
+# SBML-specific
+quick-xml   = "0.37"
+
+# Alignment-specific
+tempfile    = "3"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+debug = 1
