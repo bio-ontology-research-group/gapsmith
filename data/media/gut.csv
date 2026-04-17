@@ -1,0 +1,102 @@
+compounds,name,maxFlux
+cpd00363,Ethanol,0.1
+cpd00001,H2O,100
+cpd01420,beta-Carotene,0.1
+cpd00365,Retinol,0.1
+cpd00305,Thiamin,0.1
+cpd03424,Vitamin B12,0.1
+cpd00220,Riboflavin,0.1
+cpd00218,Niacin,0.1
+cpd00133,Nicotinamide,0.1
+cpd00644,PAN,0.1
+cpd00419,PM,0.1
+cpd00263,Pyridoxol,0.1
+cpd00215,Pyridoxal,0.1
+cpd00104,BIOT,0.1
+cpd00201,10-Formyltetrahydrofolate,0.1
+cpd00345,5-Methyltetrahydrofolate,0.1
+cpd00087,Tetrahydrofolate,0.1
+cpd00059,L-Ascorbate,0.1
+cpd00857,Provitamin D3,0.1
+cpd01628,Vitamin E,0.1
+cpd01401,Vitamin K1,0.1
+cpd00063,Ca2+,100
+cpd00099,Cl-,5
+cpd00205,K+,100
+cpd00254,Mg,7
+cpd00971,Na+,4
+cpd00009,Phosphate,6
+cpd00058,Cu2+,0.1
+cpd10515,Fe2+,0.1
+cpd10516,fe3,0.1
+cpd00030,Mn2+,0.1
+cpd00034,Zn2+,0.1
+cpd00314,D-Mannitol,0.1
+cpd00588,Sorbitol,0.1
+cpd00306,Xylitol,0.1
+cpd00208,LACT,0.1
+cpd00179,Maltose,0.1
+cpd00076,Sucrose,3
+cpd00082,D-Fructose,1
+cpd00108,Galactose,0.1
+cpd00027,D-Glucose,2
+cpd00035,L-Alanine,3
+cpd00051,L-Arginine,2
+cpd00041,L-Aspartate,4
+cpd00084,L-Cysteine,0.1
+cpd00023,L-Glutamate,9
+cpd00033,Glycine,3
+cpd00300,Urate,4
+cpd00119,L-Histidine,1
+cpd00322,L-Isoleucine,2
+cpd00107,L-Leucine,4
+cpd00039,L-Lysine,3
+cpd00060,L-Methionine,1
+cpd00066,L-Phenylalanine,2
+cpd00129,L-Proline,5
+cpd00054,L-Serine,3
+cpd00161,L-Threonine,2
+cpd00065,L-Tryptophan,0.1
+cpd00069,L-Tyrosine,1
+cpd00156,L-Valine,3
+cpd01107,Decanoate,0.1
+cpd03847,Myristic acid,1
+cpd15622,pentadecanoate (C15:0),0.1
+cpd00214,Palmitate,4
+cpd15609,heptadecanoate (C17:0),0.1
+cpd01080,ocdca,1
+cpd15269,octadecenoate,4
+cpd01122,Linoleate,3
+cpd03850,Linolenate,0.1
+cpd15016,Stearidonic acid,0.1
+cpd03848,Arachidic acid,0.1
+cpd00188,Arachidonate,0.1
+cpd16342,Adrenic acid,0.1
+cpd16301,Docosapentaenoic acid,0.1
+cpd03852,Docosahexaenoic acid,0.1
+cpd00211,Butyrate,1
+cpd03846,octanoate,0.1
+cpd00160,Cholesterol,1
+cpd27519,Pectin,10
+cpd00158,CELB,100
+cpd11732,Xylan,0.1
+cpd11970,Arabinoxylan,0.1
+cpd11955,Glucomannan,0.1
+cpd00656,Galactomannan,0.1
+cpd11696,beta-Glucan,1
+cpd00067,H+,100
+cpd00149,Co,0.1
+cpd00011,CO2,100
+cpd11640,H2,100
+cpd00048,SO4,0.1
+cpd00029,Acetate,1
+cpd00141,Propionate,1
+cpd00256,Cholate,1
+cpd01663,Chemodeoxycholate,1
+cpd02733,Deoxycholate,1
+cpd02475,Lithocholate,1
+cpd03246,Taurochenodeoxycholate,1
+cpd03247,Glycochenodeoxycholate,1
+cpd03047,Taurocholate,1
+cpd01318,Glycocholate,1
+cpd00244,Nickel,1
